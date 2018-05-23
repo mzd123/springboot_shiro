@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.extend.LogExtendMapper">
+    <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.extend.log.LogExtend">
+        <id column="logid" jdbcType="VARCHAR" property="logid"/>
+        <result column="method" jdbcType="VARCHAR" property="method"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="createtime" jdbcType="VARCHAR" property="createtime"/>
+        <result column="ifsuccess" jdbcType="VARCHAR" property="ifsuccess"/>
+        <result column="duration" jdbcType="VARCHAR" property="duration"/>
+        <result column="paramsandvalues" jdbcType="LONGVARCHAR" property="paramsandvalues"/>
+        <result column="remark" jdbcType="LONGVARCHAR" property="remark"/>
+        <result column="errormessage" jdbcType="LONGVARCHAR" property="errormessage"/>
+    </resultMap>
+    <select id="select_LogExtend" resultMap="BaseResultMap">
+        select l.*,u.username from zx_log l
+        left join zx_user u on u.userid=l.userid and u.status=1
+        <!-- 日志没有status字段，因为日志不予许删除，只能用1=1代替-->
+        <if test="username!=''">
+            <!--如果username不为空的时候，拼接左连接条件
+            拼接在这里能让左连接过去的表行数减少-->
+            and instr(u.username,#{username})>0
+        </if>
+        where 1=1
+        <if test="logid!=''">
+            and l.logid=#{logid}
+        </if>
+        <if test="ifsuccess!=''">
+            and l.ifsuccess=#{ifsuccess}
+        </if>
+        <if test="starttime!=''">
+            and l.createtime &gt;=#{starttime}
+        </if>
+        <if test="endtime!=''">
+            and l.createtime &lt;= #{endtime}
+        </if>
+    </select>
+</mapper>
