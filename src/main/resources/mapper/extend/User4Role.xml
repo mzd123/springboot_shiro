@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.extend.User4Role">
+    <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.generator.Role">
+        <id column="roleid" jdbcType="VARCHAR" property="roleid"/>
+        <result column="rolename" jdbcType="VARCHAR" property="rolename"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="createuserid" jdbcType="VARCHAR" property="createuserid"/>
+        <result column="modifyuserid" jdbcType="VARCHAR" property="modifyuserid"/>
+        <result column="modifytime" jdbcType="VARCHAR" property="modifytime"/>
+        <result column="createtime" jdbcType="VARCHAR" property="createtime"/>
+    </resultMap>
+    <select id="select_UserRole" resultMap="BaseResultMap">
+        select  r.*  from  zx_user u
+        left  join  zx_userrole z  on  z.userid=u.userid
+        left  join  zx_role r on z.roleid=r.roleid
+        where u.status=1 and z.status=1 and r.status=1
+        and u.account =#{accout}
+    </select>
+</mapper>

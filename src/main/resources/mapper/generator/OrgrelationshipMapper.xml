@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.generator.OrgrelationshipMapper">
+  <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.generator.Orgrelationship">
+    <id column="orgrelationshipid" jdbcType="VARCHAR" property="orgrelationshipid" />
+    <result column="orgid" jdbcType="VARCHAR" property="orgid" />
+    <result column="parentid" jdbcType="VARCHAR" property="parentid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="createuserid" jdbcType="VARCHAR" property="createuserid" />
+    <result column="modifyuserid" jdbcType="VARCHAR" property="modifyuserid" />
+    <result column="modifytime" jdbcType="VARCHAR" property="modifytime" />
+    <result column="createtime" jdbcType="VARCHAR" property="createtime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxmoa.myhzt.bean.generator.OrgrelationshipWithBLOBs">
+    <result column="orgpath" jdbcType="LONGVARCHAR" property="orgpath" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    orgrelationshipid, orgid, parentid, status, createuserid, modifyuserid, modifytime, 
+    createtime
+  </sql>
+  <sql id="Blob_Column_List">
+    orgpath
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zx_orgrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zx_orgrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipKey" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zx_orgrelationship
+    where orgrelationshipid = #{orgrelationshipid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipKey">
+    delete from zx_orgrelationship
+    where orgrelationshipid = #{orgrelationshipid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipExample">
+    delete from zx_orgrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipWithBLOBs">
+    insert into zx_orgrelationship (orgrelationshipid, orgid, parentid, 
+      status, createuserid, modifyuserid, 
+      modifytime, createtime, orgpath
+      )
+    values (#{orgrelationshipid,jdbcType=VARCHAR}, #{orgid,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createuserid,jdbcType=VARCHAR}, #{modifyuserid,jdbcType=VARCHAR}, 
+      #{modifytime,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}, #{orgpath,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipWithBLOBs">
+    insert into zx_orgrelationship
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgrelationshipid != null">
+        orgrelationshipid,
+      </if>
+      <if test="orgid != null">
+        orgid,
+      </if>
+      <if test="parentid != null">
+        parentid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createuserid != null">
+        createuserid,
+      </if>
+      <if test="modifyuserid != null">
+        modifyuserid,
+      </if>
+      <if test="modifytime != null">
+        modifytime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="orgpath != null">
+        orgpath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgrelationshipid != null">
+        #{orgrelationshipid,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null">
+        #{orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null">
+        #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyuserid != null">
+        #{modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="orgpath != null">
+        #{orgpath,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipExample" resultType="java.lang.Long">
+    select count(*) from zx_orgrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zx_orgrelationship
+    <set>
+      <if test="record.orgrelationshipid != null">
+        orgrelationshipid = #{record.orgrelationshipid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgid != null">
+        orgid = #{record.orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentid != null">
+        parentid = #{record.parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createuserid != null">
+        createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyuserid != null">
+        modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifytime != null">
+        modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgpath != null">
+        orgpath = #{record.orgpath,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update zx_orgrelationship
+    set orgrelationshipid = #{record.orgrelationshipid,jdbcType=VARCHAR},
+      orgid = #{record.orgid,jdbcType=VARCHAR},
+      parentid = #{record.parentid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=VARCHAR},
+      orgpath = #{record.orgpath,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zx_orgrelationship
+    set orgrelationshipid = #{record.orgrelationshipid,jdbcType=VARCHAR},
+      orgid = #{record.orgid,jdbcType=VARCHAR},
+      parentid = #{record.parentid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipWithBLOBs">
+    update zx_orgrelationship
+    <set>
+      <if test="orgid != null">
+        orgid = #{orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        parentid = #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null">
+        createuserid = #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyuserid != null">
+        modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        modifytime = #{modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="orgpath != null">
+        orgpath = #{orgpath,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where orgrelationshipid = #{orgrelationshipid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.OrgrelationshipWithBLOBs">
+    update zx_orgrelationship
+    set orgid = #{orgid,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createuserid = #{createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{modifytime,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=VARCHAR},
+      orgpath = #{orgpath,jdbcType=LONGVARCHAR}
+    where orgrelationshipid = #{orgrelationshipid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.Orgrelationship">
+    update zx_orgrelationship
+    set orgid = #{orgid,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createuserid = #{createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{modifytime,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=VARCHAR}
+    where orgrelationshipid = #{orgrelationshipid,jdbcType=VARCHAR}
+  </update>
+</mapper>

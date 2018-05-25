@@ -74,6 +74,7 @@ public class XssFilter implements Filter {
          *  4、 System.out.println(request.getRealPath("/"));   打印结果：项目的根路径
          */
         String url = request.getServletPath();
+        //System.out.println(url);
         for (String pattern : excludes) {
             //正则匹配,如果含有excludes中的任意一个就返回true
             Pattern p = Pattern.compile("^" + pattern);

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.generator.WalkMapper">
+    <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.generator.Walk">
+        <result column="walkid" jdbcType="VARCHAR" property="walkid"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="riverid" jdbcType="VARCHAR" property="riverid"/>
+        <result column="starttime" jdbcType="VARCHAR" property="starttime"/>
+        <result column="endtime" jdbcType="VARCHAR" property="endtime"/>
+        <result column="timelength" jdbcType="VARCHAR" property="timelength"/>
+        <result column="distance" jdbcType="VARCHAR" property="distance"/>
+        <result column="aespeed" jdbcType="VARCHAR" property="aespeed"/>
+        <result column="step" jdbcType="VARCHAR" property="step"/>
+        <result column="ifend" jdbcType="VARCHAR" property="ifend"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="createuserid" jdbcType="VARCHAR" property="createuserid"/>
+        <result column="modifyuserid" jdbcType="VARCHAR" property="modifyuserid"/>
+        <result column="modifytime" jdbcType="VARCHAR" property="modifytime"/>
+        <result column="createtime" jdbcType="VARCHAR" property="createtime"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    walkid, userid, riverid, starttime, endtime, timelength, distance, aespeed, step, 
+    ifend, date, status, createuserid, modifyuserid, modifytime, createtime
+  </sql>
+    <select id="selectByExample" parameterType="com.zxmoa.myhzt.bean.generator.WalkExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from zx_walk
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByExample" parameterType="com.zxmoa.myhzt.bean.generator.WalkExample">
+        delete from zx_walk
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.zxmoa.myhzt.bean.generator.Walk">
+    insert into zx_walk (walkid, userid, riverid, 
+      starttime, endtime, timelength, 
+      distance, aespeed, step, 
+      ifend, date, status, 
+      createuserid, modifyuserid, modifytime, 
+      createtime)
+    values (#{walkid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{riverid,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{timelength,jdbcType=VARCHAR}, 
+      #{distance,jdbcType=VARCHAR}, #{aespeed,jdbcType=VARCHAR}, #{step,jdbcType=VARCHAR}, 
+      #{ifend,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{createuserid,jdbcType=VARCHAR}, #{modifyuserid,jdbcType=VARCHAR}, #{modifytime,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zxmoa.myhzt.bean.generator.Walk">
+        insert into zx_walk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="walkid != null">
+                walkid,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="riverid != null">
+                riverid,
+            </if>
+            <if test="starttime != null">
+                starttime,
+            </if>
+            <if test="endtime != null">
+                endtime,
+            </if>
+            <if test="timelength != null">
+                timelength,
+            </if>
+            <if test="distance != null">
+                distance,
+            </if>
+            <if test="aespeed != null">
+                aespeed,
+            </if>
+            <if test="step != null">
+                step,
+            </if>
+            <if test="ifend != null">
+                ifend,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createuserid != null">
+                createuserid,
+            </if>
+            <if test="modifyuserid != null">
+                modifyuserid,
+            </if>
+            <if test="modifytime != null">
+                modifytime,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="walkid != null">
+                #{walkid,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="riverid != null">
+                #{riverid,jdbcType=VARCHAR},
+            </if>
+            <if test="starttime != null">
+                #{starttime,jdbcType=VARCHAR},
+            </if>
+            <if test="endtime != null">
+                #{endtime,jdbcType=VARCHAR},
+            </if>
+            <if test="timelength != null">
+                #{timelength,jdbcType=VARCHAR},
+            </if>
+            <if test="distance != null">
+                #{distance,jdbcType=VARCHAR},
+            </if>
+            <if test="aespeed != null">
+                #{aespeed,jdbcType=VARCHAR},
+            </if>
+            <if test="step != null">
+                #{step,jdbcType=VARCHAR},
+            </if>
+            <if test="ifend != null">
+                #{ifend,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createuserid != null">
+                #{createuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyuserid != null">
+                #{modifyuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null">
+                #{modifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.zxmoa.myhzt.bean.generator.WalkExample" resultType="java.lang.Long">
+        select count(*) from zx_walk
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update zx_walk
+        <set>
+            <if test="record.walkid != null">
+                walkid = #{record.walkid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userid != null">
+                userid = #{record.userid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.riverid != null">
+                riverid = #{record.riverid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.starttime != null">
+                starttime = #{record.starttime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.endtime != null">
+                endtime = #{record.endtime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.timelength != null">
+                timelength = #{record.timelength,jdbcType=VARCHAR},
+            </if>
+            <if test="record.distance != null">
+                distance = #{record.distance,jdbcType=VARCHAR},
+            </if>
+            <if test="record.aespeed != null">
+                aespeed = #{record.aespeed,jdbcType=VARCHAR},
+            </if>
+            <if test="record.step != null">
+                step = #{record.step,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ifend != null">
+                ifend = #{record.ifend,jdbcType=VARCHAR},
+            </if>
+            <if test="record.date != null">
+                date = #{record.date,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createuserid != null">
+                createuserid = #{record.createuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.modifyuserid != null">
+                modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.modifytime != null">
+                modifytime = #{record.modifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createtime != null">
+                createtime = #{record.createtime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update zx_walk
+        set walkid = #{record.walkid,jdbcType=VARCHAR},
+        userid = #{record.userid,jdbcType=VARCHAR},
+        riverid = #{record.riverid,jdbcType=VARCHAR},
+        starttime = #{record.starttime,jdbcType=VARCHAR},
+        endtime = #{record.endtime,jdbcType=VARCHAR},
+        timelength = #{record.timelength,jdbcType=VARCHAR},
+        distance = #{record.distance,jdbcType=VARCHAR},
+        aespeed = #{record.aespeed,jdbcType=VARCHAR},
+        step = #{record.step,jdbcType=VARCHAR},
+        ifend = #{record.ifend,jdbcType=VARCHAR},
+        date = #{record.date,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
+        createuserid = #{record.createuserid,jdbcType=VARCHAR},
+        modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+        modifytime = #{record.modifytime,jdbcType=VARCHAR},
+        createtime = #{record.createtime,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+</mapper>

@@ -4,6 +4,7 @@ import com.zxmoa.myhzt.constant.Common;
 import com.zxmoa.myhzt.filter.shiro.AjaxPermissionsAuthorizationFilter;
 import com.zxmoa.myhzt.filter.shiro.MyRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -57,6 +58,8 @@ public class ShiroConfig {
     @Bean(name = "securityManager")
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        //设置缓存
+        securityManager.setCacheManager(getEhCacheManager());
         securityManager.setRealm(userRealm());
         return securityManager;
     }
@@ -70,8 +73,27 @@ public class ShiroConfig {
     @DependsOn("lifecycleBeanPostProcessor")
     public MyRealm userRealm() {
         MyRealm myRealm = new MyRealm(hashedCredentialsMatcher());
+        //设置AuthenticationInfo信息缓存有效 - - 默认值是false
+        myRealm.setAuthenticationCachingEnabled(true);
+        //myRealm.setAuthenticationCacheName("authenticationCache1");
+        //其实不设置也没事，默认值就市true
+        myRealm.setAuthorizationCachingEnabled(true);
         return myRealm;
     }
+
+    /**
+     * 缓存配置
+     *
+     * @return
+     */
+    @Bean
+    public EhCacheManager getEhCacheManager() {
+        EhCacheManager em = new EhCacheManager();
+        //获取自定义的缓存配置文件
+        em.setCacheManagerConfigFile("classpath:Ehcache.xml");
+        return em;
+    }
+
 
     /**
      * 第五步
@@ -93,14 +115,16 @@ public class ShiroConfig {
          * authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
          */
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-         /* 过滤链定义，从上向下顺序执行，一般将 / ** 放在最为下边:这是一个坑呢，一不小心代码就不好使了;
-          authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问 */
-        filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        //============================swagger====================================
+        filterChainDefinitionMap.put("/swagger*/**", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        //============================druid====================================
+        filterChainDefinitionMap.put("/druid/**", "anon");
+        //============================登入====================================
         filterChainDefinitionMap.put(baseuri + "login.do", "anon");
-        // filterChainDefinitionMap.put(baseuri + "select_log.do", "anon");
+        //============================退出====================================
         filterChainDefinitionMap.put("/login/logout", "anon");
-        filterChainDefinitionMap.put("/error", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

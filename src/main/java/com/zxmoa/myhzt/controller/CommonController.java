@@ -1,18 +1,30 @@
 package com.zxmoa.myhzt.controller;
 
 import com.zxmoa.myhzt.bean.common.Result;
+import com.zxmoa.myhzt.bean.generator.Menu;
 import com.zxmoa.myhzt.common.annotation.RequestTimes;
 import com.zxmoa.myhzt.constant.Common;
+import com.zxmoa.myhzt.filter.shiro.MyRealm;
 import com.zxmoa.myhzt.service.CommonService;
+import com.zxmoa.myhzt.service.ShiroService;
 import com.zxmoa.myhzt.utils.MyString;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -21,6 +33,9 @@ public class CommonController {
     private final String baseuri = Common.baseuri;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private ShiroService shiroService;
+    private Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
 
     @RequestMapping(value = "/OverTimeRequest.do", method = RequestMethod.GET)
@@ -62,7 +77,10 @@ public class CommonController {
             pagesize = MyString.Object2String(pagesize);
             pagenum = MyString.Object2String(pagenum);
             return commonService.select_Log(logid, ifsuccess, starttime, endtime, username, pagesize, pagenum);
+        } catch (UnauthorizedException e) {
+            return new Result("503", "权限不足", null, 0, 0);
         } catch (Exception e) {
+            logger.error(e.toString());
             return new Result("500", "服务器内部错误", null, 0, 0);
         }
     }
@@ -85,9 +103,18 @@ public class CommonController {
             if ("".equals(password)) {
                 return new Result("400", "密码不能为空", null, 0, 0);
             }
-            String authenticationInfo = commonService.login(account, password);
-            return new Result("500", "服务器内部错误", null, 0, 0);
+            shiroService.login(account, password);
+            //查询他所拥有的菜单
+            List<Menu> list = shiroService.getMenu(account);
+            return new Result("200", "登入成功", list, 0, 0);
+        } catch (UnknownAccountException e) {
+            return new Result("500", "用户不存在", null, 0, 0);
+        } catch (IncorrectCredentialsException e) {
+            return new Result("500", "密码不正确", null, 0, 0);
+        } catch (AuthenticationException e) {
+            return new Result("500", "登入失败", null, 0, 0);
         } catch (Exception e) {
+            logger.error(e.toString());
             return new Result("500", "服务器内部错误", null, 0, 0);
         }
     }

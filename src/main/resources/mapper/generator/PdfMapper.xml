@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.generator.PdfMapper">
+    <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.generator.Pdf">
+        <result column="pdfid" jdbcType="VARCHAR" property="pdfid"/>
+        <result column="pdfname" jdbcType="VARCHAR" property="pdfname"/>
+        <result column="pdftype" jdbcType="VARCHAR" property="pdftype"/>
+        <result column="riverid" jdbcType="VARCHAR" property="riverid"/>
+        <result column="createuserid" jdbcType="VARCHAR" property="createuserid"/>
+        <result column="createdatetime" jdbcType="VARCHAR" property="createdatetime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="modifyuserid" jdbcType="VARCHAR" property="modifyuserid"/>
+        <result column="modifytime" jdbcType="VARCHAR" property="modifytime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxmoa.myhzt.bean.generator.PdfWithBLOBs">
+        <result column="remark" jdbcType="LONGVARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    pdfid, pdfname, pdftype, riverid, createuserid, createdatetime, status, modifyuserid, 
+    modifytime
+  </sql>
+    <sql id="Blob_Column_List">
+    remark
+  </sql>
+    <select id="selectByExampleWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.PdfExample"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from zx_pdf
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" parameterType="com.zxmoa.myhzt.bean.generator.PdfExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from zx_pdf
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByExample" parameterType="com.zxmoa.myhzt.bean.generator.PdfExample">
+        delete from zx_pdf
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.zxmoa.myhzt.bean.generator.PdfWithBLOBs">
+    insert into zx_pdf (pdfid, pdfname, pdftype, 
+      riverid, createuserid, createdatetime, 
+      status, modifyuserid, modifytime, 
+      remark)
+    values (#{pdfid,jdbcType=VARCHAR}, #{pdfname,jdbcType=VARCHAR}, #{pdftype,jdbcType=VARCHAR}, 
+      #{riverid,jdbcType=VARCHAR}, #{createuserid,jdbcType=VARCHAR}, #{createdatetime,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{modifyuserid,jdbcType=VARCHAR}, #{modifytime,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zxmoa.myhzt.bean.generator.PdfWithBLOBs">
+        insert into zx_pdf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pdfid != null">
+                pdfid,
+            </if>
+            <if test="pdfname != null">
+                pdfname,
+            </if>
+            <if test="pdftype != null">
+                pdftype,
+            </if>
+            <if test="riverid != null">
+                riverid,
+            </if>
+            <if test="createuserid != null">
+                createuserid,
+            </if>
+            <if test="createdatetime != null">
+                createdatetime,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="modifyuserid != null">
+                modifyuserid,
+            </if>
+            <if test="modifytime != null">
+                modifytime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pdfid != null">
+                #{pdfid,jdbcType=VARCHAR},
+            </if>
+            <if test="pdfname != null">
+                #{pdfname,jdbcType=VARCHAR},
+            </if>
+            <if test="pdftype != null">
+                #{pdftype,jdbcType=VARCHAR},
+            </if>
+            <if test="riverid != null">
+                #{riverid,jdbcType=VARCHAR},
+            </if>
+            <if test="createuserid != null">
+                #{createuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="createdatetime != null">
+                #{createdatetime,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyuserid != null">
+                #{modifyuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null">
+                #{modifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.zxmoa.myhzt.bean.generator.PdfExample" resultType="java.lang.Long">
+        select count(*) from zx_pdf
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update zx_pdf
+        <set>
+            <if test="record.pdfid != null">
+                pdfid = #{record.pdfid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pdfname != null">
+                pdfname = #{record.pdfname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pdftype != null">
+                pdftype = #{record.pdftype,jdbcType=VARCHAR},
+            </if>
+            <if test="record.riverid != null">
+                riverid = #{record.riverid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createuserid != null">
+                createuserid = #{record.createuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createdatetime != null">
+                createdatetime = #{record.createdatetime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.modifyuserid != null">
+                modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.modifytime != null">
+                modifytime = #{record.modifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update zx_pdf
+        set pdfid = #{record.pdfid,jdbcType=VARCHAR},
+        pdfname = #{record.pdfname,jdbcType=VARCHAR},
+        pdftype = #{record.pdftype,jdbcType=VARCHAR},
+        riverid = #{record.riverid,jdbcType=VARCHAR},
+        createuserid = #{record.createuserid,jdbcType=VARCHAR},
+        createdatetime = #{record.createdatetime,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
+        modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+        modifytime = #{record.modifytime,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update zx_pdf
+        set pdfid = #{record.pdfid,jdbcType=VARCHAR},
+        pdfname = #{record.pdfname,jdbcType=VARCHAR},
+        pdftype = #{record.pdftype,jdbcType=VARCHAR},
+        riverid = #{record.riverid,jdbcType=VARCHAR},
+        createuserid = #{record.createuserid,jdbcType=VARCHAR},
+        createdatetime = #{record.createdatetime,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
+        modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+        modifytime = #{record.modifytime,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+</mapper>

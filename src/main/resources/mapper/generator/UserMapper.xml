@@ -20,6 +20,7 @@
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxmoa.myhzt.bean.generator.UserWithBLOBs">
     <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+    <result column="eps" jdbcType="LONGVARCHAR" property="eps" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +85,7 @@
     createuserid, modifyuserid, modifytime, createtime
   </sql>
   <sql id="Blob_Column_List">
-    remark
+    remark, eps
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.UserExample" resultMap="ResultMapWithBLOBs">
     select
@@ -140,13 +141,13 @@
       tel, orgid, filepath, 
       duty, status, createuserid, 
       modifyuserid, modifytime, createtime, 
-      remark)
+      remark, eps)
     values (#{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{sex,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{orgid,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
       #{duty,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createuserid,jdbcType=VARCHAR}, 
       #{modifyuserid,jdbcType=VARCHAR}, #{modifytime,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=LONGVARCHAR})
+      #{remark,jdbcType=LONGVARCHAR}, #{eps,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zxmoa.myhzt.bean.generator.UserWithBLOBs">
     insert into zx_user
@@ -199,6 +200,9 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="eps != null">
+        eps,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userid != null">
@@ -248,6 +252,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="eps != null">
+        #{eps,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -308,6 +315,9 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=LONGVARCHAR},
       </if>
+      <if test="record.eps != null">
+        eps = #{record.eps,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -330,7 +340,8 @@
       modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
       modifytime = #{record.modifytime,jdbcType=VARCHAR},
       createtime = #{record.createtime,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=LONGVARCHAR}
+      remark = #{record.remark,jdbcType=LONGVARCHAR},
+      eps = #{record.eps,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -404,6 +415,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=LONGVARCHAR},
       </if>
+      <if test="eps != null">
+        eps = #{eps,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where userid = #{userid,jdbcType=VARCHAR}
   </update>
@@ -423,7 +437,8 @@
       modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
       modifytime = #{modifytime,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=LONGVARCHAR}
+      remark = #{remark,jdbcType=LONGVARCHAR},
+      eps = #{eps,jdbcType=LONGVARCHAR}
     where userid = #{userid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.User">

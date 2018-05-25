@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxmoa.myhzt.mapper.generator.RiverrelationshipMapper">
+  <resultMap id="BaseResultMap" type="com.zxmoa.myhzt.bean.generator.Riverrelationship">
+    <id column="riverrelationshipid" jdbcType="VARCHAR" property="riverrelationshipid" />
+    <result column="riverid" jdbcType="VARCHAR" property="riverid" />
+    <result column="parentid" jdbcType="VARCHAR" property="parentid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="createuserid" jdbcType="VARCHAR" property="createuserid" />
+    <result column="modifyuserid" jdbcType="VARCHAR" property="modifyuserid" />
+    <result column="modifytime" jdbcType="VARCHAR" property="modifytime" />
+    <result column="createtime" jdbcType="VARCHAR" property="createtime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxmoa.myhzt.bean.generator.RiverrelationshipWithBLOBs">
+    <result column="riverpath" jdbcType="LONGVARCHAR" property="riverpath" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    riverrelationshipid, riverid, parentid, status, createuserid, modifyuserid, modifytime, 
+    createtime
+  </sql>
+  <sql id="Blob_Column_List">
+    riverpath
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zx_riverrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zx_riverrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipKey" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zx_riverrelationship
+    where riverrelationshipid = #{riverrelationshipid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipKey">
+    delete from zx_riverrelationship
+    where riverrelationshipid = #{riverrelationshipid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipExample">
+    delete from zx_riverrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipWithBLOBs">
+    insert into zx_riverrelationship (riverrelationshipid, riverid, parentid, 
+      status, createuserid, modifyuserid, 
+      modifytime, createtime, riverpath
+      )
+    values (#{riverrelationshipid,jdbcType=VARCHAR}, #{riverid,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createuserid,jdbcType=VARCHAR}, #{modifyuserid,jdbcType=VARCHAR}, 
+      #{modifytime,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}, #{riverpath,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipWithBLOBs">
+    insert into zx_riverrelationship
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="riverrelationshipid != null">
+        riverrelationshipid,
+      </if>
+      <if test="riverid != null">
+        riverid,
+      </if>
+      <if test="parentid != null">
+        parentid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createuserid != null">
+        createuserid,
+      </if>
+      <if test="modifyuserid != null">
+        modifyuserid,
+      </if>
+      <if test="modifytime != null">
+        modifytime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="riverpath != null">
+        riverpath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="riverrelationshipid != null">
+        #{riverrelationshipid,jdbcType=VARCHAR},
+      </if>
+      <if test="riverid != null">
+        #{riverid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null">
+        #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyuserid != null">
+        #{modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="riverpath != null">
+        #{riverpath,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipExample" resultType="java.lang.Long">
+    select count(*) from zx_riverrelationship
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zx_riverrelationship
+    <set>
+      <if test="record.riverrelationshipid != null">
+        riverrelationshipid = #{record.riverrelationshipid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.riverid != null">
+        riverid = #{record.riverid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentid != null">
+        parentid = #{record.parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createuserid != null">
+        createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyuserid != null">
+        modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifytime != null">
+        modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.riverpath != null">
+        riverpath = #{record.riverpath,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update zx_riverrelationship
+    set riverrelationshipid = #{record.riverrelationshipid,jdbcType=VARCHAR},
+      riverid = #{record.riverid,jdbcType=VARCHAR},
+      parentid = #{record.parentid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=VARCHAR},
+      riverpath = #{record.riverpath,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zx_riverrelationship
+    set riverrelationshipid = #{record.riverrelationshipid,jdbcType=VARCHAR},
+      riverid = #{record.riverid,jdbcType=VARCHAR},
+      parentid = #{record.parentid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      createuserid = #{record.createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{record.modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{record.modifytime,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipWithBLOBs">
+    update zx_riverrelationship
+    <set>
+      <if test="riverid != null">
+        riverid = #{riverid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        parentid = #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null">
+        createuserid = #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyuserid != null">
+        modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        modifytime = #{modifytime,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=VARCHAR},
+      </if>
+      <if test="riverpath != null">
+        riverpath = #{riverpath,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where riverrelationshipid = #{riverrelationshipid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxmoa.myhzt.bean.generator.RiverrelationshipWithBLOBs">
+    update zx_riverrelationship
+    set riverid = #{riverid,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createuserid = #{createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{modifytime,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=VARCHAR},
+      riverpath = #{riverpath,jdbcType=LONGVARCHAR}
+    where riverrelationshipid = #{riverrelationshipid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxmoa.myhzt.bean.generator.Riverrelationship">
+    update zx_riverrelationship
+    set riverid = #{riverid,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createuserid = #{createuserid,jdbcType=VARCHAR},
+      modifyuserid = #{modifyuserid,jdbcType=VARCHAR},
+      modifytime = #{modifytime,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=VARCHAR}
+    where riverrelationshipid = #{riverrelationshipid,jdbcType=VARCHAR}
+  </update>
+</mapper>

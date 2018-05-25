@@ -1,8 +1,10 @@
 package com.zxmoa.myhzt.filter.shiro;
 
-import com.alibaba.fastjson.JSONObject;
+import com.zxmoa.myhzt.bean.generator.Menu;
+import com.zxmoa.myhzt.bean.generator.Role;
 import com.zxmoa.myhzt.bean.generator.User;
-import com.zxmoa.myhzt.service.CommonService;
+import com.zxmoa.myhzt.service.ShiroService;
+import com.zxmoa.myhzt.utils.MyString;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -11,37 +13,44 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class MyRealm extends AuthorizingRealm {
     private Logger logger = LoggerFactory.getLogger(MyRealm.class);
     @Autowired
-    private CommonService commonService;
+    private ShiroService shiroService;
 
     public MyRealm(CredentialsMatcher matcher) {
         super(matcher);
+        //设置之后就没有缓存机制了
+        setCachingEnabled(false);
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Session session = SecurityUtils.getSubject().getSession();
-        //查询用户的权限
-        JSONObject permission = null;//(JSONObject) session.getAttribute(Constants.SESSION_USER_PERMISSION);
-        logger.info("permission的值为:" + permission);
-        logger.info("本用户权限为:" + permission.get("permissionList"));
-        //为当前用户设置角色和权限
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.addStringPermissions((Collection<String>) permission.get("permissionList"));
-        return authorizationInfo;
+        String accout = MyString.Object2String(SecurityUtils.getSubject().getPrincipal());
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        //根据账号查找用户所有的角色
+        List<Role> roleList = this.shiroService.select_UserRole(accout);
+        Set<String> rolename = new HashSet<String>();
+        Set<String> roleid = new HashSet<String>();
+        for (Role r : roleList) {
+            roleid.add(r.getRoleid());
+            rolename.add(r.getRolename());
+        }
+        simpleAuthorizationInfo.setRoles(rolename);
+        Set<String> permissions = this.shiroService.select_UserPermissions(roleid, accout);
+        simpleAuthorizationInfo.setStringPermissions(permissions);
+        return simpleAuthorizationInfo;
     }
 
     /**
@@ -59,7 +68,7 @@ public class MyRealm extends AuthorizingRealm {
         //2. 从 UsernamePasswordToken 中来获取 username
         String account = upToken.getUsername();
         //3. 调用数据库的方法, 从数据库中查询 username 对应的用户记录
-        List<User> list = commonService.select_userbyaccount(account);
+        List<User> list = shiroService.select_userbyaccount(account);
         if (list == null || list.size() == 0) {
             throw new UnknownAccountException("用户不存在!");
         }

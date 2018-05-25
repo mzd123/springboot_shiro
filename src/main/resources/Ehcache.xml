@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd">
+
+    <!--https://www.sojson.com/blog/73.html-->
+    <!--maxElementsInMemory:内存中保存的对象数量-->
+    <!--eternal:是否是永恒数据，如果是，则它的超时设置会被忽略-->
+    <!--timeToIdleSeconds:对象空闲时间，指对象在多长时间没有被访问就会失效。只对eternal为false的有效。默认值0，表示一直可以访问-->
+    <!--timeToLiveSeconds:对象存活时间，指对象从创建到失效所需要的时间。只对eternal为false的有效。默认值0，表示一直可以访问-->
+    <!--overflowToDisk:如果内存中数据数量超过maxElementsInMemory限制，是否要缓存到磁盘上-->
+    <!--diskPersistent:是否在磁盘上持久化。指重启jvm后，数据是否有效。默认为false-->
+    <!--diskExpiryThreadIntervalSeconds:对象检测线程运行时间间隔。标识对象状态的线程多长时间运行一次-->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"/>
+
+
+    <!--认证缓存-->
+    <cache
+            name="authenticationCache"
+            maxEntriesLocalHeap="2000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"
+            statistics="true"/>
+
+    <!-- 授权缓存 -->
+    <cache
+            name="authorizationCache"
+            maxEntriesLocalHeap="2000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"
+            statistics="true"/>
+</ehcache>
+

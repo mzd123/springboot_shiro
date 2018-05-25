@@ -35,8 +35,33 @@
         </javaClientGenerator>
 
 
-        <table tableName="zx_log" domainObjectName="Log"/>
-        <table tableName="zx_user" domainObjectName="User"/>
+        <!--<table tableName="zx_log" domainObjectName="Log"/>-->
+        <table tableName="zx_usermenu" domainObjectName="Usermenu"/>
+        <!--<table tableName="zx_user" domainObjectName="User"/>-->
+        <!--<table tableName="zx_announcement" domainObjectName="Announcement"/>-->
+        <!--<table tableName="zx_app" domainObjectName="App"/>-->
+        <!--<table tableName="zx_complaints" domainObjectName="Complaints"/>-->
+        <!--<table tableName="zx_file" domainObjectName="File"/>-->
+        <!--<table tableName="zx_handle" domainObjectName="Handle"/>-->
+        <!--<table tableName="zx_menu" domainObjectName="Menu"/>-->
+        <!--<table tableName="zx_message" domainObjectName="Message"/>-->
+        <!--<table tableName="zx_org" domainObjectName="Org"/>-->
+        <!--<table tableName="zx_orgrelationship" domainObjectName="Orgrelationship"/>-->
+        <!--<table tableName="zx_orgtype" domainObjectName="Orgtype"/>-->
+        <!--<table tableName="zx_outfall" domainObjectName="Outfall"/>-->
+        <!--<table tableName="zx_outfalltype" domainObjectName="Outfalltype"/>-->
+        <!--<table tableName="zx_pdf" domainObjectName="Pdf"/>-->
+        <!--<table tableName="zx_problem," domainObjectName="Problem"/>-->
+        <!--<table tableName="zx_problemtype" domainObjectName="Problemtype"/>-->
+        <!--<table tableName="zx_public" domainObjectName="Public"/>-->
+        <!--<table tableName="zx_river" domainObjectName="River"/>-->
+        <!--<table tableName="zx_riverrelationship" domainObjectName="Riverrelationship"/>-->
+        <!--<table tableName="zx_riveruser" domainObjectName="Riveruser"/>-->
+        <!--<table tableName="zx_role" domainObjectName="Role"/>-->
+        <!--<table tableName="zx_rolemenu" domainObjectName="Rolemenu"/>-->
+        <!--<table tableName="zx_track" domainObjectName="Track"/>-->
+        <!--<table tableName="zx_walk" domainObjectName="Walk"/>-->
+        <!--<table tableName="zx_userrole" domainObjectName="Userrole"/>-->
 
     </context>
 
