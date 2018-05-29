@@ -1,6 +1,7 @@
 package com.zxmoa.myhzt.controller;
 
 import com.zxmoa.myhzt.bean.common.Result;
+import com.zxmoa.myhzt.bean.common.UserOnline;
 import com.zxmoa.myhzt.bean.generator.Menu;
 import com.zxmoa.myhzt.common.annotation.RequestTimes;
 import com.zxmoa.myhzt.constant.Common;
@@ -16,6 +17,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,7 @@ public class CommonController {
         return new Result("503", "请求次数过于频繁，请稍后再试", null, 0, 0);
     }
 
-
+    @RequiresRoles("系统管理员")
     @RequestMapping(value = baseuri + "select_log.do", method = RequestMethod.GET)
     @ApiOperation("查询日志列表")
     @ApiImplicitParams({
@@ -77,8 +79,6 @@ public class CommonController {
             pagesize = MyString.Object2String(pagesize);
             pagenum = MyString.Object2String(pagenum);
             return commonService.select_Log(logid, ifsuccess, starttime, endtime, username, pagesize, pagenum);
-        } catch (UnauthorizedException e) {
-            return new Result("503", "权限不足", null, 0, 0);
         } catch (Exception e) {
             logger.error(e.toString());
             return new Result("500", "服务器内部错误", null, 0, 0);
@@ -119,4 +119,35 @@ public class CommonController {
         }
     }
 
+    @RequiresRoles("系统管理员")
+    @RequestMapping(value = baseuri + "select_useronline.do", method = RequestMethod.GET)
+    @ApiOperation("获取在线人员列表")
+    public Result select_useronline() {
+        try {
+            List<UserOnline> list = shiroService.select_UserOnline();
+            return new Result("200", "获取在线人员成功", list, 0, 0);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new Result("500", "服务器内部错误", null, 0, 0);
+        }
+    }
+
+    @RequiresRoles("系统管理员")
+    @RequestMapping(value = baseuri + "forceLogout.do", method = RequestMethod.GET)
+    @ApiOperation("将人踢下线")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sessionid", value = "缓存id", required = true, paramType = "query", dataType = "String")
+    })
+    public Result forceLogout(String sessionid) {
+        try {
+            shiroService.forceLogout(sessionid);
+            return new Result("200", "踢成功", null, 0, 0);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            if ("org.apache.shiro.session.UnknownSessionException".equals(e.getClass().getName())) {
+                return new Result("500", "session不存在", null, 0, 0);
+            }
+            return new Result("500", "服务器内部错误", null, 0, 0);
+        }
+    }
 }

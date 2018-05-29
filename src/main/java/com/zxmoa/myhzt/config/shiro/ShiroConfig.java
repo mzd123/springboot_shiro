@@ -1,21 +1,29 @@
 package com.zxmoa.myhzt.config.shiro;
 
+import com.zxmoa.myhzt.common.listener.ShiroSessionListener;
 import com.zxmoa.myhzt.constant.Common;
 import com.zxmoa.myhzt.filter.shiro.AjaxPermissionsAuthorizationFilter;
 import com.zxmoa.myhzt.filter.shiro.MyRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.SessionListener;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -61,6 +69,8 @@ public class ShiroConfig {
         //设置缓存
         securityManager.setCacheManager(getEhCacheManager());
         securityManager.setRealm(userRealm());
+        //设置session
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
@@ -162,6 +172,20 @@ public class ShiroConfig {
         return hashedCredentialsMatcher;
 
     }
+    @Bean
+    public SessionDAO sessionDAO() {
+        MemorySessionDAO sessionDAO = new MemorySessionDAO();
+        return sessionDAO;
+    }
 
+    @Bean
+    public SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        Collection<SessionListener> listeners = new ArrayList<SessionListener>();
+        listeners.add(new ShiroSessionListener());
+        sessionManager.setSessionListeners(listeners);
+        sessionManager.setSessionDAO(sessionDAO());
+        return sessionManager;
+    }
 
 }

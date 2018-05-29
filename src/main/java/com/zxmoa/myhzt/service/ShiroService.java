@@ -1,5 +1,6 @@
 package com.zxmoa.myhzt.service;
 
+import com.zxmoa.myhzt.bean.common.UserOnline;
 import com.zxmoa.myhzt.bean.generator.Menu;
 import com.zxmoa.myhzt.bean.generator.Role;
 import com.zxmoa.myhzt.bean.generator.User;
@@ -8,13 +9,18 @@ import com.zxmoa.myhzt.dao.ShiroDao;
 import com.zxmoa.myhzt.utils.MyString;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 /**
@@ -24,6 +30,9 @@ public class ShiroService {
 
     @Autowired
     private ShiroDao shiroDao;
+    @Autowired
+
+    private SessionDAO sessionDAO;
 
     @Log(value = "用户登入")
     public void login(String account, String password) {
@@ -31,6 +40,11 @@ public class ShiroService {
         token.isRememberMe();
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.login(token);
+        //注销其他session
+        List<Session> loginedList = getLoginedSession(currentUser);
+        for (Session session : loginedList) {
+            session.stop();
+        }
     }
 
     /**
@@ -93,5 +107,68 @@ public class ShiroService {
         permissionList.removeAll(permissionList2);
         permissionList2.addAll(permissionList);
         return permissionList2;
+    }
+
+    @Log(value = "获取在线人员")
+    public List<UserOnline> select_UserOnline() {
+        List<UserOnline> list = new ArrayList<>();
+        //获取所有在线人员的session
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        for (Session session : sessions) {
+            UserOnline userOnline = new UserOnline();
+            User user = new User();
+            SimplePrincipalCollection principalCollection = new SimplePrincipalCollection();
+            if (session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) == null) {
+                continue;
+            } else {
+                principalCollection = (SimplePrincipalCollection) session
+                        .getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+                //如果SimpleAuthenticationInfo中填的是account的话，将没法实现强转
+                user = (User) principalCollection.getPrimaryPrincipal();
+                userOnline.setUsername(user.getUsername());
+                userOnline.setUserId(user.getUserid());
+            }
+            userOnline.setId((String) session.getId());
+            userOnline.setHost(session.getHost());
+            userOnline.setStartTimestamp(new SimpleDateFormat("YYYY-MM-DD HH:mm:ss").format(session.getStartTimestamp()));
+            userOnline.setLastAccessTime(new SimpleDateFormat("YYYY-MM-DD HH:mm:ss").format(session.getLastAccessTime()));
+            Long timeout = session.getTimeout();
+            if (timeout > 0) {
+                userOnline.setTimeout(timeout);
+                list.add(userOnline);
+            }
+        }
+        return list;
+    }
+
+
+    @Log(value = "将人踢下线")
+    public void forceLogout(String sessionId) {
+        Session session = sessionDAO.readSession(sessionId);
+        session.setTimeout(0);
+    }
+
+
+    //获取同一个账户的session集合
+    private List<Session> getLoginedSession(Subject currentUser) {
+        Collection<Session> list = ((DefaultSessionManager) ((DefaultSecurityManager) SecurityUtils
+                .getSecurityManager()).getSessionManager()).getSessionDAO()
+                .getActiveSessions();
+        List<Session> loginedList = new ArrayList<>();
+        User loginUser = (User) currentUser.getPrincipal();
+        for (Session session : list) {
+            Subject s = new Subject.Builder().session(session).buildSubject();
+            if (s.isAuthenticated()) {
+                User user = (User) s.getPrincipal();
+                //如果账号相等的话
+                if (user.getAccount().equals(loginUser.getAccount())) {
+                    //并且两个sessionid不一样
+                    if (!session.getId().equals(currentUser.getSession().getId())) {
+                        loginedList.add(session);
+                    }
+                }
+            }
+        }
+        return loginedList;
     }
 }

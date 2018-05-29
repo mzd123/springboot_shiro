@@ -1,5 +1,6 @@
 package com.zxmoa.myhzt.filter.shiro;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zxmoa.myhzt.bean.generator.Menu;
 import com.zxmoa.myhzt.bean.generator.Role;
 import com.zxmoa.myhzt.bean.generator.User;
@@ -37,10 +38,12 @@ public class MyRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String accout = MyString.Object2String(SecurityUtils.getSubject().getPrincipal());
+        //获取当前登入用户
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String account = user.getAccount();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //根据账号查找用户所有的角色
-        List<Role> roleList = this.shiroService.select_UserRole(accout);
+        List<Role> roleList = this.shiroService.select_UserRole(account);
         Set<String> rolename = new HashSet<String>();
         Set<String> roleid = new HashSet<String>();
         for (Role r : roleList) {
@@ -48,7 +51,7 @@ public class MyRealm extends AuthorizingRealm {
             rolename.add(r.getRolename());
         }
         simpleAuthorizationInfo.setRoles(rolename);
-        Set<String> permissions = this.shiroService.select_UserPermissions(roleid, accout);
+        Set<String> permissions = this.shiroService.select_UserPermissions(roleid, account);
         simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
     }
@@ -76,7 +79,8 @@ public class MyRealm extends AuthorizingRealm {
         User user = list.get(0);
         String password_from_db = user.getPassword();
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                account,
+                //这里如果填的是account的话，在ShiroService的select_UserOnline方法中无法获取该用户的userid
+                user,
                 password_from_db,
                 // salt=username+salt,盐值加密
                 ByteSource.Util.bytes(account),
@@ -88,7 +92,7 @@ public class MyRealm extends AuthorizingRealm {
     public static void main(String[] args) {
         String hashAlgorithmName = "MD5";
         Object credentials = "www.zxmoa.com";
-        Object salt = ByteSource.Util.bytes("admin");
+        Object salt = ByteSource.Util.bytes("cs");
         int hashIterations = 2;
         Object result = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
         System.out.println(result);

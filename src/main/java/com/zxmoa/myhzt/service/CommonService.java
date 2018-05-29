@@ -20,7 +20,6 @@ public class CommonService {
     @Autowired
     private CommonDao commonDao;
 
-    @RequiresRoles("管理员")
     @Log(value = "查询日志列表")
     public Result select_Log(String logid, String ifsuccess, String starttime, String endtime, String username, String pagesize, String pagenum) {
         int i = MyString.String2int(pagesize, Common.i);
