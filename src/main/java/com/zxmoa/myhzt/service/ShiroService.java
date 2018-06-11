@@ -40,7 +40,7 @@ public class ShiroService {
         token.isRememberMe();
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.login(token);
-        //注销其他session
+        //注销其他session---保证一个账号只有一个人登入
         List<Session> loginedList = getLoginedSession(currentUser);
         for (Session session : loginedList) {
             session.stop();

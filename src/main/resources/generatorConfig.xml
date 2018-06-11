@@ -34,9 +34,9 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-
+        <table tableName="zx_job" domainObjectName="Job"/>
         <!--<table tableName="zx_log" domainObjectName="Log"/>-->
-        <table tableName="zx_usermenu" domainObjectName="Usermenu"/>
+        <!--<table tableName="zx_usermenu" domainObjectName="Usermenu"/>-->
         <!--<table tableName="zx_user" domainObjectName="User"/>-->
         <!--<table tableName="zx_announcement" domainObjectName="Announcement"/>-->
         <!--<table tableName="zx_app" domainObjectName="App"/>-->

@@ -1,5 +1,6 @@
 package com.zxmoa.myhzt.controller;
 
+import com.zxmoa.myhzt.bean.common.ConverterBean;
 import com.zxmoa.myhzt.bean.common.Result;
 import com.zxmoa.myhzt.bean.common.UserOnline;
 import com.zxmoa.myhzt.bean.generator.Menu;
@@ -22,9 +23,8 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +39,17 @@ public class CommonController {
     private ShiroService shiroService;
     private Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
+    /**
+     * 所有的运行时异常都会被拦截到这里
+     *
+     * @param throwable
+     * @return
+     */
+    @ExceptionHandler(Exception.class)
+    public Result Error(Throwable throwable) {
+        logger.error(throwable.toString());
+        return new Result("5", "服务器内部错误", null, 0, 0);
+    }
 
     @RequestMapping(value = "/OverTimeRequest.do", method = RequestMethod.GET)
     public Result OverTimeRequest() {
@@ -58,31 +69,26 @@ public class CommonController {
             @ApiImplicitParam(name = "pagenum", value = "当前第几页", dataType = "String", required = true, paramType = "query")
     })
     public Result select_log(String logid, String ifsuccess, String starttime, String endtime, String username, String pagesize, String pagenum) {
-        try {
-            logid = MyString.Object2String(logid);
-            if ((!logid.equals("")) && logid.length() != 32) {
-                return new Result("400", "logid无效", null, 0, 0);
-            }
-            ifsuccess = MyString.Object2String(ifsuccess);
-            if ((!ifsuccess.equals("")) && (!ifsuccess.equals(Common.success) || !ifsuccess.equals(Common.fail))) {
-                return new Result("400", "ifsuccess无效", null, 0, 0);
-            }
-            starttime = MyString.Object2String(starttime);
-            if ((!starttime.equals("")) && starttime.length() != 10) {
-                return new Result("400", "starttime格式无效（正确格式：YYYY-MM-dd）", null, 0, 0);
-            }
-            endtime = MyString.Object2String(endtime);
-            if ((!endtime.equals("")) && endtime.length() != 10) {
-                return new Result("400", "endtime格式无效（正确格式：YYYY-MM-dd）", null, 0, 0);
-            }
-            username = MyString.Object2String(username);
-            pagesize = MyString.Object2String(pagesize);
-            pagenum = MyString.Object2String(pagenum);
-            return commonService.select_Log(logid, ifsuccess, starttime, endtime, username, pagesize, pagenum);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new Result("500", "服务器内部错误", null, 0, 0);
+        logid = MyString.Object2String(logid);
+        if ((!logid.equals("")) && logid.length() != 32) {
+            return new Result("400", "logid无效", null, 0, 0);
         }
+        ifsuccess = MyString.Object2String(ifsuccess);
+        if ((!ifsuccess.equals("")) && (!ifsuccess.equals(Common.success) || !ifsuccess.equals(Common.fail))) {
+            return new Result("400", "ifsuccess无效", null, 0, 0);
+        }
+        starttime = MyString.Object2String(starttime);
+        if ((!starttime.equals("")) && starttime.length() != 10) {
+            return new Result("400", "starttime格式无效（正确格式：YYYY-MM-dd）", null, 0, 0);
+        }
+        endtime = MyString.Object2String(endtime);
+        if ((!endtime.equals("")) && endtime.length() != 10) {
+            return new Result("400", "endtime格式无效（正确格式：YYYY-MM-dd）", null, 0, 0);
+        }
+        username = MyString.Object2String(username);
+        pagesize = MyString.Object2String(pagesize);
+        pagenum = MyString.Object2String(pagenum);
+        return commonService.select_Log(logid, ifsuccess, starttime, endtime, username, pagesize, pagenum);
     }
 
     //5分钟内不能连续请求登入接口5次
@@ -93,7 +99,7 @@ public class CommonController {
             @ApiImplicitParam(name = "account", value = "账号", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "String")
     })
-    public Result login(String account, String password) {
+    public Result login(@RequestParam(value = "account", required = true) String account, String password) {
         try {
             account = MyString.Object2String(account);
             if ("".equals(account)) {
@@ -108,10 +114,13 @@ public class CommonController {
             List<Menu> list = shiroService.getMenu(account);
             return new Result("200", "登入成功", list, 0, 0);
         } catch (UnknownAccountException e) {
+            logger.error(e.toString());
             return new Result("500", "用户不存在", null, 0, 0);
         } catch (IncorrectCredentialsException e) {
+            logger.error(e.toString());
             return new Result("500", "密码不正确", null, 0, 0);
         } catch (AuthenticationException e) {
+            logger.error(e.toString());
             return new Result("500", "登入失败", null, 0, 0);
         } catch (Exception e) {
             logger.error(e.toString());
@@ -123,13 +132,8 @@ public class CommonController {
     @RequestMapping(value = baseuri + "select_useronline.do", method = RequestMethod.GET)
     @ApiOperation("获取在线人员列表")
     public Result select_useronline() {
-        try {
-            List<UserOnline> list = shiroService.select_UserOnline();
-            return new Result("200", "获取在线人员成功", list, 0, 0);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new Result("500", "服务器内部错误", null, 0, 0);
-        }
+        List<UserOnline> list = shiroService.select_UserOnline();
+        return new Result("200", "获取在线人员成功", list, 0, 0);
     }
 
     @RequiresRoles("系统管理员")
@@ -150,4 +154,11 @@ public class CommonController {
             return new Result("500", "服务器内部错误", null, 0, 0);
         }
     }
+
+
+    @RequestMapping("/test4converter.do")
+    public void Converter(@RequestParam("converterBean") ConverterBean converterBean) {
+        System.out.println(converterBean.toString());
+    }
+
 }
